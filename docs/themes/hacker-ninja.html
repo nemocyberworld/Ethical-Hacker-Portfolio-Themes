@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Hacker Ninja Captain Nemo — Ethical Hacker Portfolio Theme" />
+  <title>Hacker Ninja — Captain Nemo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07090c;--fg:#e5fff5;--pri:#22d3ee;--acc:#10b981;--warn:#f59e0b;--mut:#94a3b8;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:'Fira Code',monospace;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+    a{color:var(--pri);text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 1.2rem}
+
+    /* ambience */
+    .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(34,211,238,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.05) 1px,transparent 1px);background-size:56px 56px;z-index:-1}
+    .watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-12deg);font-weight:900;font-size:8rem;letter-spacing:.5rem;color:rgba(16,185,129,.06);z-index:-2;pointer-events:none;user-select:none}
+    .matrix{position:fixed;inset:0;opacity:.12;z-index:-1;pointer-events:none}
+
+    /* nav */
+    .nav{position:sticky;top:0;background:rgba(0,0,0,.85);backdrop-filter:blur(14px);border-bottom:1px solid rgba(34,211,238,.25);z-index:40}
+    .nav-in{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0}
+    .brand{color:var(--pri);font-weight:800;text-shadow:0 0 10px rgba(34,211,238,.55)}
+    .brand b{color:#ef4444}
+    .menu{list-style:none;display:flex;gap:1.1rem}
+    .menu a{padding:.45rem .7rem;border:1px solid transparent;border-radius:7px;color:#a7f3d0}
+    .menu a:hover{border-color:var(--pri);background:rgba(34,211,238,.08);box-shadow:0 0 12px rgba(34,211,238,.3)}
+
+    /* hero */
+    .hero{padding:2.2rem 0 1.2rem;text-align:center}
+    .glitch{position:relative;display:inline-block;font-size:3.1rem;font-weight:900;text-transform:uppercase;color:#e6fffb;text-shadow:.05em 0 0 #06b6d4,-.03em -.04em 0 #fb7185,.025em .04em 0 #fde047;animation:gl 720ms infinite}
+    .glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0}
+    .glitch::before{animation:glt 710ms infinite;clip-path:polygon(0 0,100% 0,100% 44%,0 44%);transform:translate(-.04em,-.03em);opacity:.75}
+    .glitch::after{animation:glb 800ms infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);transform:translate(.04em,.03em);opacity:.75}
+    @keyframes gl{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(-.05em,.01em)}}
+    @keyframes glt{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(-.05em,-.01em)}}
+    @keyframes glb{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(.05em,.01em)}}
+    .subtitle{margin-top:.8rem;color:#c7fff2;opacity:.9}
+
+    /* ninja divider */
+    .katana{position:relative;margin:1.4rem auto 0;height:2px;max-width:540px;background:linear-gradient(90deg,transparent,var(--acc),transparent)}
+    .katana::after{content:"忍";position:absolute;top:-.9rem;right:-1.2rem;font-weight:900;color:var(--acc);opacity:.85}
+
+    /* terminal */
+    .term{background:rgba(0,0,0,.9);border:1px solid var(--pri);border-radius:12px;box-shadow:0 0 24px rgba(34,211,238,.25);margin:1.6rem auto;max-width:880px;overflow:hidden}
+    .term-top{display:flex;align-items:center;gap:.45rem;padding:.6rem .9rem;border-bottom:1px solid #1f2937;background:rgba(0,0,0,.75)}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .r{background:#ef4444}.y{background:#f59e0b}.g{background:#10b981}
+    .term-body{padding:1rem}
+    .prompt{color:var(--acc);margin-right:.5rem}
+    .typing{display:inline-block;border-right:2px solid var(--acc);white-space:nowrap;overflow:hidden;animation:typing 3s steps(40,end), caret .75s step-end infinite}
+    @keyframes typing{from{width:0}to{width:100%}}@keyframes caret{from,to{border-color:transparent}50%{border-color:var(--acc)}}
+    .status{display:flex;justify-content:center;gap:1rem;margin-top:.75rem}
+    .pill{display:flex;align-items:center;gap:.45rem;font-size:.85rem;padding:.3rem .65rem;background:#0b1220;border:1px solid #1f2937;border-radius:6px}
+    .dot-sm{width:7px;height:7px;border-radius:50%;background:var(--acc)}
+
+    /* section */
+    section{padding:2.2rem 0}
+    h2.section{display:flex;align-items:center;gap:.7rem;font-size:1.7rem;margin-bottom:1.3rem}
+    .badge{color:#fb7185;font-weight:800}
+    .line{flex:1;height:1px;background:linear-gradient(90deg,var(--pri),transparent)}
+
+    /* about */
+    .about{display:grid;grid-template-columns:2fr 1fr;gap:2rem}
+    .code{line-height:1.9}
+    .cmt{color:#6ee7b7}.kw{color:#38bdf8}.cl{color:#5eead4}.pr{color:#a7f3d0}.st{color:#fca5a5}
+
+    /* skills */
+    .skills h3{color:#a7f3d0;margin-bottom:1rem;text-align:center}
+    .skill{margin-bottom:1rem}
+    .bar{height:8px;background:#0b1220;border:1px solid #1f2937;border-radius:6px;overflow:hidden}
+    .fill{height:100%;background:linear-gradient(90deg,var(--acc),#047857);width:0}
+
+    /* projects */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem}
+    .card{background:rgba(0,0,0,.86);border:1px solid #1f2937;border-radius:12px;padding:1.2rem;transition:.22s}
+    .card:hover{transform:translateY(-6px);border-color:var(--acc);box-shadow:0 14px 30px rgba(16,185,129,.18)}
+    .c-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+    .tag{font-size:.7rem;border:1px solid var(--acc);color:var(--acc);background:rgba(16,185,129,.15);padding:.2rem .55rem;border-radius:6px}
+    .tech{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem}
+    .chip{font-size:.75rem;padding:.22rem .5rem;border-radius:6px;border:1px solid #1f2937;background:#0b1220}
+    .actions{display:flex;gap:.5rem;margin-top:.9rem}
+    .btn{display:inline-block;border:1px solid var(--acc);color:var(--bg);background:var(--acc);padding:.5rem .85rem;border-radius:6px;font-weight:800}
+    .btn.alt{background:transparent;color:#a7f3d0}
+    .btn.alt:hover{background:rgba(16,185,129,.12)}
+
+    /* contact */
+    .contact{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+    .kard{display:flex;gap:.8rem;align-items:center;border:1px solid #1f2937;background:#0b1220;border-radius:12px;padding:1rem;transition:.18s}
+    .kard:hover{border-color:var(--acc);transform:translateX(6px)}
+
+    /* footer */
+    footer{border-top:1px solid #1f2937;padding:1.2rem 0;text-align:center;color:var(--mut)}
+
+    /* responsive */
+    @media (max-width: 860px){.about,.contact{grid-template-columns:1fr}.glitch{font-size:2.2rem}.watermark{font-size:4rem}}
+  </style>
+</head>
+<body>
+  <canvas class="matrix" id="matrix"></canvas>
+  <div class="bg-grid"></div>
+  <div class="watermark">NINJA</div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="wrap nav-in">
+      <div class="brand"><b>[</b> Hacker Ninja <b>]</b> CaptainNemo</div>
+      <ul class="menu">
+        <li><a href="#about">👤 About</a></li>
+        <li><a href="#projects">🛠 Projects</a></li>
+        <li><a href="#contact">📨 Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero">
+      <h1 class="glitch" data-text="Hacker Ninja">Hacker Ninja</h1>
+      <p class="subtitle typing">Red Team Tactician • VAPT Specialist • Stealth OSINT</p>
+      <div class="katana"></div>
+
+      <div class="term" style="margin-top:1.2rem">
+        <div class="term-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span style="margin-left:auto;opacity:.7;font-size:.9rem">root@ninja:~$</span></div>
+        <div class="term-body">
+          <div><span class="prompt">root@ninja:~$</span><span class="typing" id="cmd">id && echo "Shadow linked — Ninja mode engaged"</span></div>
+          <div style="margin-top:.6rem;font-size:.95rem">
+            <span style="color:#10b981">✓ Cloak initialized</span><br/>
+            <span style="color:#22d3ee">→ Loading recon modules…</span><br/>
+            <span style="color:#f59e0b">⚡ Ready to breach (legally)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status">
+        <div class="pill"><span class="dot-sm"></span> ONLINE</div>
+        <div class="pill"><span class="dot-sm"></span> STEALTH</div>
+        <div class="pill"><span class="dot-sm"></span> ENCRYPTED</div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2 class="section"><span class="badge">01.</span><span>About Me</span><span class="line"></span></h2>
+      <div class="about">
+        <div class="term">
+          <div class="term-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span style="margin-left:auto;opacity:.7;font-size:.9rem">profile.ninja</span></div>
+          <div class="term-body code">
+            <span class="cmt">// Ninja discipline. Offensive security. Precision.</span><br />
+            <span class="kw">class</span> <span class="cl">Shinobi</span> {<br />
+            &nbsp;&nbsp;<span class="pr">handle</span>: <span class="st">"Hacker Ninja — Captain Nemo"</span>,<br />
+            &nbsp;&nbsp;<span class="pr">dojo</span>: <span class="st">"Bangladesh"</span>,<br />
+            &nbsp;&nbsp;<span class="pr">arts</span>: [<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"Red Team & Adversary Simulation"</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"VAPT / Web & API"</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"Stealth OSINT & Threat Intel"</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"Bash / Python / Automation"</span>,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">"Forensics (Foundations)"</span>
+            &nbsp;&nbsp;],<br />
+            &nbsp;&nbsp;<span class="pr">nindo</span>: <span class="st">"Silent, precise, ethical."</span><br />
+            }<br />
+          </div>
+        </div>
+        <div class="skills">
+          <h3>Skill Matrix</h3>
+          <div class="skill"><div style="margin-bottom:.3rem">Bash</div><div class="bar"><div class="fill" style="width:98%"></div></div></div>
+          <div class="skill"><div style="margin-bottom:.3rem">Python</div><div class="bar"><div class="fill" style="width:95%"></div></div></div>
+          <div class="skill"><div style="margin-bottom:.3rem">Linux</div><div class="bar"><div class="fill" style="width:93%"></div></div></div>
+          <div class="skill"><div style="margin-bottom:.3rem">Web / API Security</div><div class="bar"><div class="fill" style="width:92%"></div></div></div>
+          <div class="skill"><div style="margin-bottom:.3rem">OSINT</div><div class="bar"><div class="fill" style="width:90%"></div></div></div>
+          <div class="skill"><div style="margin-bottom:.3rem">Forensics</div><div class="bar"><div class="fill" style="width:84%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2 class="section"><span class="badge">02.</span><span>Projects</span><span class="line"></span></h2>
+      <div class="grid">
+        <div class="card">
+          <div class="c-head"><div style="font-size:1.05rem;color:#a7f3d0">Silent Recon</div><span class="tag">ACTIVE</span></div>
+          <p>Noise‑free target mapping with rate‑aware scheduling and parallelized asset discovery.</p>
+          <div class="tech"><span class="chip">Python</span><span class="chip">Bash</span><span class="chip">httpx</span><span class="chip">amass</span></div>
+          <div class="actions"><a class="btn" href="https://github.com/nemocyberworld" target="_blank" rel="noreferrer noopener">Repo</a><a class="btn alt" href="#">Docs</a></div>
+        </div>
+        <div class="card">
+          <div class="c-head"><div style="font-size:1.05rem;color:#a7f3d0">Shadow CTF</div><span class="tag">BETA</span></div>
+          <p>Minimal‑surface CTF collection with puzzles focusing on logic over brute force.</p>
+          <div class="tech"><span class="chip">Crypto</span><span class="chip">Web</span><span class="chip">Forensics</span></div>
+          <div class="actions"><a class="btn" href="https://github.com/nemocyberworld" target="_blank" rel="noreferrer noopener">Repo</a><a class="btn alt" href="#">Demo</a></div>
+        </div>
+        <div class="card">
+          <div class="c-head"><div style="font-size:1.05rem;color:#a7f3d0">Ninja Playbook</div><span class="tag">STABLE</span></div>
+          <p>Battle‑tested methodology for VAPT engagements with reporting templates and scripts.</p>
+          <div class="tech"><span class="chip">Methodology</span><span class="chip">Automation</span><span class="chip">Reporting</span></div>
+          <div class="actions"><a class="btn" href="#">Read</a><a class="btn alt" href="#">Download</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2 class="section"><span class="badge">03.</span><span>Contact</span><span class="line"></span></h2>
+      <div class="contact">
+        <div class="kard"><div style="font-size:1.3rem">🐙</div><div><div style="color:#a7f3d0">GitHub</div><a href="https://github.com/nemocyberworld" target="_blank" rel="noreferrer noopener">@nemocyberworld</a></div></div>
+        <div class="kard"><div style="font-size:1.3rem">🌐</div><div><div style="color:#a7f3d0">HackToLive</div><a href="https://hacktolive.net/" target="_blank" rel="noreferrer noopener">hacktolive.net</a></div></div>
+        <div class="kard"><div style="font-size:1.3rem">💼</div><div><div style="color:#a7f3d0">LinkedIn</div><a href="#" target="_blank" rel="noreferrer noopener">Captain Nemo</a></div></div>
+        <div class="kard"><div style="font-size:1.3rem">✉️</div><div><div style="color:#a7f3d0">Email</div><a href="mailto:contact@nemocyber.world">contact@nemocyber.world</a></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© 2025 Hacker Ninja — Captain Nemo • Responsible Disclosure welcomed</div>
+  </footer>
+
+  <script>
+    // Matrix rain
+    const cvs=document.getElementById('matrix');const ctx=cvs.getContext('2d');
+    function size(){cvs.width=window.innerWidth;cvs.height=window.innerHeight}
+    size();
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&*+-/'.split('');
+    const fs=12;let cols=Math.floor(cvs.width/fs);let drops=new Array(cols).fill(1);
+    function draw(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,cvs.width,cvs.height);ctx.fillStyle='#10b981';ctx.font=fs+'px Fira Code';for(let i=0;i<drops.length;i++){const t=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(t,i*fs,drops[i]*fs);if(drops[i]*fs>cvs.height&&Math.random()>0.975)drops[i]=0;drops[i]++}}setInterval(draw,35);
+    window.addEventListener('resize',()=>{size();cols=Math.floor(cvs.width/fs);drops=new Array(cols).fill(1)});
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})});
+
+    // Animate bars when visible
+    const obs=new IntersectionObserver((es)=>{es.forEach(en=>{if(en.isIntersecting){en.target.querySelectorAll('.fill').forEach(f=>{f.style.width=getComputedStyle(f).width})}})},{threshold:.4});
+    const skills=document.querySelector('.skills');if(skills)obs.observe(skills);
+
+    // Reduced motion
+    const mq=window.matchMedia('(prefers-reduced-motion: reduce)');if(mq.matches){document.querySelectorAll('.typing').forEach(el=>el.style.animation='none')}
+  </script>
+</body>
+</html>

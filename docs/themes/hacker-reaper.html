@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
+    <meta name="description" content="Hacker Reaper — Ethical Hacker Portfolio Theme for Captain Nemo"/>
+    <title>Hacker Reaper — Captain Nemo</title>
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#05060a",
+              fg: "#f8f7ff",
+              violet: "#8b5cf6",
+              magenta: "#ec4899",
+              cyan: "#22d3ee",
+              mint: "#10b981",
+            },
+            fontFamily: { mono: ["Fira Code","ui-monospace","SFMono-Regular","Menlo","Monaco","Consolas","Liberation Mono","Courier New","monospace"] }
+          }
+        }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+    <style>
+      /* Ambient grid + watermark */
+      .ambient-grid{
+        background-image:
+          radial-gradient(transparent 60%, rgba(139,92,246,.08) 61%),
+          linear-gradient(rgba(236,72,153,.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(139,92,246,.05) 1px, transparent 1px);
+        background-size:100% 100%,54px 54px,54px 54px;
+      }
+      .watermark{
+        position:fixed;inset:auto;top:50%;left:50%;
+        transform:translate(-50%,-50%) rotate(-10deg);
+        font-weight:900;font-size:7rem;letter-spacing:.45rem;
+        color:rgba(139,92,246,.07);z-index:-2;pointer-events:none;user-select:none
+      }
+      /* Matrix canvas */
+      .matrix{position:fixed;inset:0;opacity:.1;z-index:-1;pointer-events:none}
+      /* Glitch title */
+      .glitch{
+        position:relative;display:inline-block;
+        text-shadow:.05em 0 0 #22d3ee, -.03em -.04em 0 #ec4899, .025em .04em 0 #fde047;
+        animation:gl 720ms infinite
+      }
+      .glitch::before,.glitch::after{
+        content:attr(data-text);position:absolute;inset:0
+      }
+      .glitch::before{animation:glt 710ms infinite;clip-path:polygon(0 0,100% 0,100% 44%,0 44%);transform:translate(-.04em,-.03em);opacity:.75}
+      .glitch::after{animation:glb 805ms infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);transform:translate(.04em,.03em);opacity:.75}
+      @keyframes gl{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(-.05em,.01em)}}
+      @keyframes glt{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(-.05em,-.01em)}}
+      @keyframes glb{0%,14%,15%,49%,50%,99%,100%{transform:translate(0)}15%,49%{transform:translate(.05em,.01em)}}
+      /* Typing caret */
+      .typing{border-right:2px solid #ec4899;white-space:nowrap;overflow:hidden;animation:typing 3s steps(40,end), caret .75s step-end infinite}
+      @keyframes typing{from{width:0}to{width:100%}}
+      @keyframes caret{from,to{border-color:transparent}50%{border-color:#ec4899}}
+    </style>
+  </head>
+  <body class="bg-bg text-fg font-mono overflow-x-hidden">
+    <!-- Matrix + ambience -->
+    <canvas id="matrix" class="matrix"></canvas>
+    <div class="ambient-grid fixed inset-0 -z-[1]"></div>
+    <div class="watermark">REAPER</div>
+
+    <!-- NAV -->
+    <header class="sticky top-0 z-40 bg-black/80 backdrop-blur border-b border-violet/30">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="text-violet font-extrabold drop-shadow">
+          <span class="text-magenta">[</span> Hacker Reaper <span class="text-magenta">]</span> CaptainNemo
+        </div>
+        <nav>
+          <ul class="flex gap-3 text-sm">
+            <li><a class="px-2 py-1 rounded border border-transparent hover:border-violet hover:bg-violet/10 text-violet/90" href="#about">👤 About</a></li>
+            <li><a class="px-2 py-1 rounded border border-transparent hover:border-violet hover:bg-violet/10 text-violet/90" href="#projects">🛠 Projects</a></li>
+            <li><a class="px-2 py-1 rounded border border-transparent hover:border-violet hover:bg-violet/10 text-violet/90" href="#contact">📨 Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="max-w-6xl mx-auto px-4">
+      <!-- HERO -->
+      <section class="text-center pt-10 pb-6">
+        <h1 class="glitch text-4xl sm:text-5xl font-extrabold" data-text="Hacker Reaper">Hacker Reaper</h1>
+        <p class="typing mx-auto mt-3 max-w-xl text-pink-200/90">Red Team Operative • VAPT • Dark OSINT</p>
+
+        <!-- divider -->
+        <div class="relative mx-auto mt-6 h-[2px] max-w-xl bg-gradient-to-r from-transparent via-magenta to-transparent">
+          <span class="absolute -top-4 -left-4 text-magenta text-xl">☠</span>
+          <span class="absolute -top-2 -right-4 text-violet/80">⟂</span>
+        </div>
+
+        <!-- Terminal card -->
+        <div class="mt-8 mx-auto max-w-3xl bg-black/80 border border-violet/50 rounded-xl shadow-[0_0_28px_rgba(139,92,246,.25)] overflow-hidden">
+          <div class="flex items-center gap-2 px-4 py-2 border-b border-gray-800">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+            <span class="ml-auto text-xs text-gray-400">root@reaper:~$</span>
+          </div>
+          <div class="p-4 text-sm">
+            <div><span class="text-magenta">root@reaper</span>:<span class="text-cyan-300">~</span>$ <span class="typing">whoami && echo "Linked to the undernet — Reaper protocol armed"</span></div>
+            <div class="mt-3 space-y-1">
+              <div class="text-mint">✓ Identity verified</div>
+              <div class="text-cyan">→ Spinning threat intel feeds…</div>
+              <div class="text-amber-400">⚡ Engagement status: HOT</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- status pills -->
+        <div class="mt-4 flex justify-center gap-3 text-xs">
+          <div class="flex items-center gap-2 px-2.5 py-1 rounded border border-gray-800 bg-slate-900/80"><span class="w-1.5 h-1.5 rounded-full bg-mint"></span>ONLINE</div>
+          <div class="flex items-center gap-2 px-2.5 py-1 rounded border border-gray-800 bg-slate-900/80"><span class="w-1.5 h-1.5 rounded-full bg-mint"></span>STEALTH</div>
+          <div class="flex items-center gap-2 px-2.5 py-1 rounded border border-gray-800 bg-slate-900/80"><span class="w-1.5 h-1.5 rounded-full bg-mint"></span>ENCRYPTED</div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="py-10 border-t border-gray-900/70">
+        <h2 class="flex items-center gap-3 text-2xl mb-6"><span class="text-magenta font-extrabold">01.</span><span>About Me</span><span class="h-px flex-1 bg-gradient-to-r from-violet to-transparent"></span></h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- code-style card -->
+          <div class="md:col-span-2 bg-black/85 border border-gray-800 rounded-xl overflow-hidden">
+            <div class="flex items-center gap-2 px-4 py-2 border-b border-gray-800">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+              <span class="ml-auto text-xs text-gray-400">profile.reap</span>
+            </div>
+            <div class="p-4 leading-7 text-sm">
+<span class="text-pink-300">// Precision exploitation. Silent ops. Ethical intent.</span><br/>
+<span class="text-cyan-300">class</span> <span class="text-violet-300">Reaper</span> {<br/>
+&nbsp;&nbsp;<span class="text-fuchsia-100">handle</span>: <span class="text-rose-300">"Hacker Reaper — Captain Nemo"</span>,<br/>
+&nbsp;&nbsp;<span class="text-fuchsia-100">territory</span>: <span class="text-rose-300">"Bangladesh"</span>,<br/>
+&nbsp;&nbsp;<span class="text-fuchsia-100">craft</span>: [<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-rose-300">"Red Team & Adversary Simulation"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-rose-300">"VAPT — Web / API / Cloud"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-rose-300">"Dark OSINT & Threat Intel"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-rose-300">"Automation: Bash / Python"</span>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-rose-300">"Forensics (Foundations)"</span><br/>
+&nbsp;&nbsp;],<br/>
+&nbsp;&nbsp;<span class="text-fuchsia-100">motto</span>: <span class="text-rose-300">"Harvest signals. Protect systems."</span><br/>
+}<br/>
+            </div>
+          </div>
+
+          <!-- skills -->
+          <div class="bg-black/85 border border-gray-800 rounded-xl p-4">
+            <h3 class="text-center text-violet-100 mb-3">Skill Matrix</h3>
+            <div class="space-y-3" id="skills">
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>Bash</span><span>98%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="98%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>Python</span><span>95%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="95%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>Linux</span><span>93%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="93%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>Web / API Security</span><span>92%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="92%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>OSINT</span><span>90%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="90%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1"><span>Forensics</span><span>84%</span></div>
+                <div class="h-2 bg-slate-900 rounded"><div class="h-2 bg-mint rounded w-0 will-animate" data-width="84%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="py-10 border-t border-gray-900/70">
+        <h2 class="flex items-center gap-3 text-2xl mb-6"><span class="text-magenta font-extrabold">02.</span><span>Projects</span><span class="h-px flex-1 bg-gradient-to-r from-violet to-transparent"></span></h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <article class="bg-black/85 border border-gray-800 rounded-xl p-5 hover:border-violet transition">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-violet-100 font-semibold">Harvest Recon</h4>
+              <span class="text-[10px] px-2 py-0.5 rounded border border-violet/50 text-violet-200">ACTIVE</span>
+            </div>
+            <p class="text-sm text-gray-300">Signal-first recon engine with quiet scraping, asset correlation, and risk hints.</p>
+            <div class="mt-3 flex flex-wrap gap-2 text-xs">
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Python</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">httpx</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">amass</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">subfinder</span>
+            </div>
+            <div class="mt-4 flex gap-3 text-sm">
+              <a class="text-violet-300 hover:underline" href="https://github.com/nemocyberworld" target="_blank" rel="noopener noreferrer">Repo</a>
+              <a class="text-gray-300 hover:underline" href="#">Docs</a>
+            </div>
+          </article>
+
+          <article class="bg-black/85 border border-gray-800 rounded-xl p-5 hover:border-violet transition">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-violet-100 font-semibold">UnderNet CTF</h4>
+              <span class="text-[10px] px-2 py-0.5 rounded border border-violet/50 text-violet-200">BETA</span>
+            </div>
+            <p class="text-sm text-gray-300">CTF set themed on covert tradecraft — logic-heavy, brute-force-light.</p>
+            <div class="mt-3 flex flex-wrap gap-2 text-xs">
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Crypto</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Web</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Forensics</span>
+            </div>
+            <div class="mt-4 flex gap-3 text-sm">
+              <a class="text-violet-300 hover:underline" href="https://github.com/nemocyberworld" target="_blank" rel="noopener noreferrer">Repo</a>
+              <a class="text-gray-300 hover:underline" href="#">Demo</a>
+            </div>
+          </article>
+
+          <article class="bg-black/85 border border-gray-800 rounded-xl p-5 hover:border-violet transition">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-violet-100 font-semibold">Reaper Playbook</h4>
+              <span class="text-[10px] px-2 py-0.5 rounded border border-violet/50 text-violet-200">STABLE</span>
+            </div>
+            <p class="text-sm text-gray-300">Engagement methodology with checklists, reporting templates, and capture scripts.</p>
+            <div class="mt-3 flex flex-wrap gap-2 text-xs">
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Methodology</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Automation</span>
+              <span class="px-2 py-1 rounded bg-slate-900 border border-gray-800">Reporting</span>
+            </div>
+            <div class="mt-4 flex gap-3 text-sm">
+              <a class="text-gray-300 hover:underline" href="#">Read</a>
+              <a class="text-violet-300 hover:underline" href="#">Download</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" class="py-10 border-t border-gray-900/70">
+        <h2 class="flex items-center gap-3 text-2xl mb-6"><span class="text-magenta font-extrabold">03.</span><span>Contact</span><span class="h-px flex-1 bg-gradient-to-r from-violet to-transparent"></span></h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a class="group rounded-xl border border-gray-800 bg-black/85 p-4 hover:border-violet transition" href="https://github.com/nemocyberworld" target="_blank" rel="noopener noreferrer">
+            <div class="text-2xl">🐙</div>
+            <div class="text-sm text-violet-200">GitHub</div>
+            <div class="text-xs text-gray-300">@nemocyberworld</div>
+          </a>
+          <a class="group rounded-xl border border-gray-800 bg-black/85 p-4 hover:border-violet transition" href="https://hacktolive.net/" target="_blank" rel="noopener noreferrer">
+            <div class="text-2xl">🌐</div>
+            <div class="text-sm text-violet-200">HackToLive</div>
+            <div class="text-xs text-gray-300">hacktolive.net</div>
+          </a>
+          <div class="rounded-xl border border-gray-800 bg-black/85 p-4">
+            <div class="text-2xl">💼</div>
+            <div class="text-sm text-violet-200">LinkedIn</div>
+            <div class="text-xs text-gray-300">Captain Nemo</div>
+          </div>
+          <a class="group rounded-xl border border-gray-800 bg-black/85 p-4 hover:border-violet transition" href="mailto:contact@nemocyber.world">
+            <div class="text-2xl">✉️</div>
+            <div class="text-sm text-violet-200">Email</div>
+            <div class="text-xs text-gray-300">contact@nemocyber.world</div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gray-900/70">
+      <div class="max-w-6xl mx-auto px-4 py-8 text-xs text-gray-500 text-center">
+        © 2025 Hacker Reaper — Captain Nemo • Responsible Disclosure welcomed
+      </div>
+    </footer>
+
+    <script>
+      // Matrix rain (Tailwind-safe, iframe-safe)
+      const canvas = document.getElementById('matrix');
+      const ctx = canvas.getContext('2d');
+      function size(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+      size();
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%&*+-/'.split('');
+      const fontSize = 12;
+      let columns = Math.floor(canvas.width / fontSize);
+      let drops = Array.from({length: columns}, () => 1);
+
+      function draw(){
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--tw-color-violet') || '#8b5cf6';
+        ctx.font = fontSize + 'px Fira Code';
+        for (let i=0;i<drops.length;i++){
+          const text = chars[Math.floor(Math.random()*chars.length)];
+          ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+          if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i]=0;
+          drops[i]++;
+        }
+      }
+      let loop = setInterval(draw, 35);
+      addEventListener('resize',()=>{ size(); columns = Math.floor(canvas.width/fontSize); drops = Array.from({length:columns},()=>1) });
+
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth'}) }
+        })
+      });
+
+      // Animate skill bars when visible
+      const skills = document.getElementById('skills');
+      if ('IntersectionObserver' in window && skills){
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(en=>{
+            if (en.isIntersecting){
+              skills.querySelectorAll('.will-animate').forEach(el=>{
+                el.style.transition = 'width 1.2s ease';
+                el.style.width = el.getAttribute('data-width') || '0%';
+              });
+              io.disconnect();
+            }
+          });
+        }, {threshold: .4});
+        io.observe(skills);
+      } else {
+        // fallback
+        skills?.querySelectorAll('.will-animate').forEach(el=>{ el.style.width = el.getAttribute('data-width') || '0%'; });
+      }
+
+      // Reduced motion
+      const mq = matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches){ clearInterval(loop); document.querySelectorAll('.typing').forEach(el=>el.style.animation='none'); }
+    </script>
+  </body>
+</html>
