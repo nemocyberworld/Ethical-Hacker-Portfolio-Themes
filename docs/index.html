@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ethical Hacker Themes — Gallery & Preview</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Browse and live-preview hacker portfolio themes stored under ./themes" />
+  <style>
+    /* Optional: nicer scrollbar */
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-thumb{background:#374151;border-radius:8px}
+    ::-webkit-scrollbar-track{background:#111827}
+  </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-dvh grid grid-rows-[auto,1fr,auto]">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-gray-800 bg-gray-950/80 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono border border-emerald-500/20">H4X</span>
+        <h1 class="font-semibold tracking-tight">Ethical Hacker Portfolio Themes</h1>
+      </div>
+      <div class="ml-auto flex items-center gap-3 w-full sm:w-auto">
+        <label for="q" class="sr-only">Search themes</label>
+        <input id="q" type="search" placeholder="Search themes…" class="w-full sm:w-64 px-3 py-2 rounded-md bg-gray-900 border border-gray-800 focus:border-emerald-500 focus:ring-emerald-500 outline-none text-sm" />
+        <button id="refreshBtn" class="px-3 py-2 rounded-md bg-gray-900 border border-gray-800 hover:border-gray-700 text-sm">Refresh</button>
+        <a id="openThemeBtn" target="_blank" class="px-3 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-sm hidden">Open Theme</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Layout (fills the rest of the screen) -->
+  <main class="max-w-7xl mx-auto px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-4 w-full h-full min-h-0 overflow-hidden">
+    <!-- Sidebar / Menu -->
+    <aside class="lg:col-span-4 xl:col-span-3 rounded-xl border border-gray-800 bg-gray-950 overflow-hidden flex flex-col min-h-0">
+      <div class="p-3 border-b border-gray-800 flex items-center justify-between">
+        <span class="text-xs uppercase tracking-wider text-gray-400">Themes</span>
+        <span id="themeCount" class="text-xs text-gray-500">0</span>
+      </div>
+      <ul id="themeList" class="flex-1 overflow-auto divide-y divide-gray-900"></ul>
+      <div class="p-3 text-xs text-gray-500 border-t border-gray-800">
+        <!-- Maintainer tip: Keep a manifest file at ./themes/manifest.json -->
+        <p class="mt-2 text-gray-400">For custom portfolio site development, contact the theme creator: <a href="mailto:nemo14398@mail.com" class="text-emerald-400 hover:underline">nemo14398@mail.com</a></p>
+      </div>
+    </aside>
+
+    <!-- Preview -->
+    <section class="lg:col-span-8 xl:col-span-9 rounded-xl border border-gray-800 bg-gray-900/20 overflow-hidden flex flex-col min-h-0">
+      <div class="p-3 border-b border-gray-800 flex items-center gap-3">
+        <span class="text-xs uppercase tracking-wider text-gray-400">Live Preview</span>
+        <span id="currentTheme" class="text-sm text-gray-300"></span>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="reloadIframe" class="px-2.5 py-1.5 rounded-md bg-gray-900 border border-gray-800 hover:border-gray-700 text-xs">Reload</button>
+          <button id="newWindow" class="px-2.5 py-1.5 rounded-md bg-gray-900 border border-gray-800 hover:border-gray-700 text-xs">Pop-out</button>
+          <button id="copyEmbed" class="px-2.5 py-1.5 rounded-md bg-gray-900 border border-gray-800 hover:border-gray-700 text-xs">Copy Embed</button>
+          <button id="downloadSrc" class="px-2.5 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-xs">Download Source</button>
+        </div>
+      </div>
+      <div class="relative flex-1 min-h-0">
+        <iframe id="preview" title="Theme preview" class="w-full h-full bg-white" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+        <div id="emptyState" class="absolute inset-0 hidden grid place-items-center">
+          <div class="text-center p-8">
+            <div class="text-4xl mb-2">🧪</div>
+            <p class="text-gray-400">Choose a theme from the left to preview it here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-7xl mx-auto px-4 pb-8 text-xs text-gray-500">
+    <p class="mt-2 text-gray-400">Powered by <a href="https://hacktolive.net/academy" target="_blank" class="text-emerald-400 hover:underline">HackToLive Academy</a></p>
+  </footer>
+
+
+  <script>
+  // === Theme Gallery & Preview Loader ===
+  const els = {
+    list: document.getElementById('themeList'),
+    count: document.getElementById('themeCount'),
+    iframe: document.getElementById('preview'),
+    current: document.getElementById('currentTheme'),
+    openBtn: document.getElementById('openThemeBtn'),
+    q: document.getElementById('q'),
+    reload: document.getElementById('reloadIframe'),
+    popout: document.getElementById('newWindow'),
+    copy: document.getElementById('copyEmbed'),
+    refresh: document.getElementById('refreshBtn'),
+    empty: document.getElementById('emptyState'),
+    download: document.getElementById('downloadSrc')
+  };
+
+  let THEMES = []; // {file, name, author}
+  const THEMES_DIR = 'themes/';
+
+  async function loadManifest() {
+    try {
+      const r = await fetch(THEMES_DIR + 'manifest.json', { cache: 'no-store' });
+      if (!r.ok) throw new Error('manifest missing');
+      const data = await r.json();
+      if (!Array.isArray(data.themes)) throw new Error('invalid manifest');
+      return data.themes;
+    } catch (e) {
+      // Fallback: define a simple list here if you don't use a manifest.
+      return [
+        { file: 'captain-nemo.html', name: 'Captain Nemo', author: 'nemocyberworld' },
+        { file: 'hacker-ninja.html', name: 'Hacker Ninja', author: 'nemocyberworld' },
+        { file: 'hacker-reaper.html', name: 'Hacker Reaper', author: 'nemocyberworld' },
+      ];
+    }
+  }
+
+  function renderList(themes) {
+    els.list.innerHTML = '';
+    const q = (els.q.value || '').toLowerCase();
+    const filtered = themes.filter(t => (t.name + ' ' + t.file + ' ' + (t.author||'')).toLowerCase().includes(q));
+
+    filtered.forEach((t) => {
+      const li = document.createElement('li');
+      li.className = 'p-3 hover:bg-gray-900/40 cursor-pointer group';
+      li.dataset.file = t.file;
+      li.innerHTML = `
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="text-sm font-medium text-gray-100">${t.name || t.file}</div>
+            <div class="text-xs text-gray-500">${t.author ? 'by ' + t.author : t.file}</div>
+          </div>
+          <div class="text-xs px-2 py-1 rounded bg-gray-900 border border-gray-800 text-gray-400 opacity-0 group-hover:opacity-100 transition">Preview</div>
+        </div>`;
+      li.addEventListener('click', () => selectTheme(t.file));
+      li.addEventListener('keydown', (e) => { if (e.key === 'Enter') selectTheme(t.file); });
+      li.tabIndex = 0;
+      els.list.appendChild(li);
+    });
+
+    els.count.textContent = filtered.length + ' / ' + themes.length;
+    if (!getHashTheme()) {
+      els.empty.classList.remove('hidden');
+      els.iframe.classList.add('opacity-0');
+    }
+  }
+
+  function selectTheme(file) {
+    const src = THEMES_DIR + file;
+    els.iframe.src = src; // use src for faster load & sand-boxing
+    els.current.textContent = file;
+    els.openBtn.href = src; els.openBtn.classList.remove('hidden');
+    els.empty.classList.add('hidden');
+    els.iframe.classList.remove('opacity-0');
+    setHashTheme(file);
+  }
+
+  // URL hash helpers: #theme=filename.html
+  function getHashTheme() {
+    const m = location.hash.match(/theme=([^&]+)/);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function setHashTheme(file) {
+    const params = new URLSearchParams(location.hash.replace(/^#/, ''));
+    params.set('theme', file);
+    location.hash = params.toString();
+  }
+
+  // Toolbar actions
+  els.reload.addEventListener('click', () => { const s = els.iframe.src; els.iframe.src = s; });
+  els.popout.addEventListener('click', () => { if (els.iframe.src) window.open(els.iframe.src, '_blank'); });
+  els.copy.addEventListener('click', async () => {
+    if (!els.iframe.src) return;
+    const code = `<iframe src="${els.iframe.src}" style="width:100%;height:80vh;border:0" loading="lazy" referrerpolicy="no-referrer"></iframe>`;
+    try { await navigator.clipboard.writeText(code); toast('Embed code copied'); } catch { toast('Copy failed'); }
+  });
+  els.download.addEventListener('click', downloadCurrentTheme);
+
+  async function downloadCurrentTheme() {
+    const file = els.current.textContent?.trim();
+    if (!file) { toast('Pick a theme first'); return; }
+    const url = THEMES_DIR + file;
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Fetch failed');
+      const blob = await res.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = file;
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(a.href);
+      a.remove();
+      toast('Download started');
+    } catch (e) {
+      toast('Download failed');
+    }
+  }
+
+  els.q.addEventListener('input', () => renderList(THEMES));
+  els.refresh.addEventListener('click', init);
+
+  function toast(msg) {
+    const n = document.createElement('div');
+    n.textContent = msg;
+    n.className = 'fixed bottom-6 right-6 bg-gray-900/90 border border-gray-800 px-3 py-2 rounded text-sm shadow-lg';
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 1800);
+  }
+
+  async function init() {
+    THEMES = await loadManifest();
+    renderList(THEMES);
+    const start = getHashTheme();
+    if (start) {
+      const exists = THEMES.some(t => t.file === start);
+      if (exists) selectTheme(start); else toast('Theme not found: ' + start);
+    }
+  }
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== els.q) { e.preventDefault(); els.q.focus(); }
+  });
+
+  // Boot
+  init();
+  </script>
+</body>
+</html>
